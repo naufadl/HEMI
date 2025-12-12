@@ -1,10 +1,10 @@
 import pygame
-from .screen_manager import ScreenManager
+from screen_manager import ScreenManager
 
 def main():
     pygame.init()
 
-    screen_size=(1400,700)
+    screen_size=(1000,600)
     screen=pygame.display.set_mode(screen_size)
     pygame.display.set_caption("WELCOME TO SCREEN MANAGER HEMI")
 

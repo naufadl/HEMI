@@ -1,5 +1,6 @@
-from .screen.main_menu import MainMenuScreen
-#buat game dan soal
+from screen.main_menu import MainMenuScreen
+from screen.soal import Soal
+
 
 class ScreenManager:
     def __init__(self, screen_size):
@@ -9,9 +10,9 @@ class ScreenManager:
         self._register_screen()
 
     def _register_screen(self):
-        self.screens["Main_menu"]=MainMenuScreen(self, self.screen_size) 
-        #self.screens["Soal"]=Soal
-
+        self.screens["Main_menu"]=MainMenuScreen(self, self.screen_size)
+        self.screens["Soal"]=Soal(self,self.screen_size)
+        
         self.go_to("Main_menu")
 
     def go_to(self, name):

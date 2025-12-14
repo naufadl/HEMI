@@ -6,6 +6,11 @@ class MainMenuScreen(ScreenBase):
     def __init__(self, manager, screen_size):
         super().__init__(manager, screen_size)
         
+        image_path = r"C:\Users\tutii\Downloads\FP PBO\HEMI\assets\images\background_main_menu\Summer2.png"
+
+        bg_image=pygame.image.load(image_path).convert()
+        self.bg=pygame.transform.scale(bg_image, screen_size)
+
         self.font_title=pygame.font.SysFont(None,48)
         self.font_button=pygame.font.SysFont(None,28)
 
@@ -13,9 +18,9 @@ class MainMenuScreen(ScreenBase):
         cy=screen_size[1]//2-40
 
         self.buttons=[
-            Button("Game", (cx,cy+100), (180,40), self.game, self.font_button),
+            Button("Game", (cx+250,cy), (180,40), self.game, self.font_button),
             Button('Soal', (cx+250,cy+100), (180,40), self.soal, self.font_button),
-            Button('Exit',(cx-250,cy+100), (180,40), self.exit, self.font_button)
+            Button('Exit',(cx+250,cy+200), (180,40), self.exit, self.font_button)
         ]
 
     def game(self):
@@ -37,8 +42,8 @@ class MainMenuScreen(ScreenBase):
         pass
 
     def draw(self, surface):
-        surface.fill((255,255,255))
-        title=self.font_title.render("HEMI", True, (0,0,0))
+        surface.blit(self.bg, (0, 0))
+        title=self.font_title.render("HEMI", True, (255,255,255))
         surface.blit(title, (self.screen_width//2-45, 120))
 
         for i in self.buttons:

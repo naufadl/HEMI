@@ -22,7 +22,8 @@ class Soal(ScreenBase):
             Button('Question 2', (cx+250,cy+100), (180,40),  self.q2, self.font_button),
             Button('Question 3',(cx,cy+100), (180,40), self.q3, self.font_button),
             Button('Question 4',(cx-250,cy+100), (180,40),  self.q4, self.font_button),
-            Button('Question 5',(cx,cy+200), (180,40), self.q1,  self.font_button)
+            Button('Question 5',(cx,cy+200), (180,40), self.q1,  self.font_button),
+            Button('Previous', (cx-390, cy+270), (100,40), self.prev_from_soal, self.font_button)
         ]
 
 
@@ -41,6 +42,9 @@ class Soal(ScreenBase):
     def q5(self):
         self.manager.go_to('q5')
 
+    def prev_from_soal(self):
+        self.manager.go_to('Main_menu')
+
     def handle_event(self, event):
         for i in self.buttons:
             i.handle_event(event)
@@ -51,7 +55,7 @@ class Soal(ScreenBase):
     def draw(self, surface):
         surface.blit(self.bg, (0, 0))
         title=self.font_title.render("Oh noooo, i really like this course", True, (255,255,255))
-        surface.blit(title, (self.screen_width//2-title.get_width()//2, 120))
+        surface.blit(title, (self.screen_width//2-title.get_width()//2, 80))
 
         for i in self.buttons:
             i.draw(surface)

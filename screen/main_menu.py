@@ -1,6 +1,6 @@
 import pygame
 from .base import ScreenBase
-from ..ui.button import Button
+from UI.button import Button
 
 class MainMenuScreen(ScreenBase):
     def __init__(self, manager, screen_size):
@@ -22,7 +22,7 @@ class MainMenuScreen(ScreenBase):
         self.manager.go_to('game')
 
     def soal(self):
-        self.manager.got_to('soal')
+        self.manager.go_to('soal')
 
     def exit(self):
         pygame.quit()

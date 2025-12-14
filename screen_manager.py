@@ -1,7 +1,7 @@
 from screen.main_menu import MainMenuScreen
 from screen.game_screen import GameScreen
-#buat game dan soal
 from screen.soal import Soal
+from src.coin import Coin
 
 
 class ScreenManager:
@@ -9,14 +9,15 @@ class ScreenManager:
         self.screen_size=screen_size
         self.screens={}
         self.current_screen=None
+        self.player_coin=Coin(0)
         self._register_screen()
 
     def _register_screen(self):
-        self.screens["Main_menu"]=MainMenuScreen(self, self.screen_size) 
+        self.screens["Main_menu"]=MainMenuScreen(self, self.screen_size,self.player_coin) 
         self.screens["game"]=GameScreen(self, self.screen_size)
         #self.screens["Soal"]=Soal
 
-        self.screens["Main_menu"]=MainMenuScreen(self, self.screen_size)
+        self.screens["Main_menu"]=MainMenuScreen(self, self.screen_size,self.player_coin)
         self.screens["Soal"]=Soal(self,self.screen_size)
         
         self.go_to("Main_menu")

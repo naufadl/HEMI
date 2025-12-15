@@ -2,6 +2,7 @@ import pygame
 import os
 from .base import ScreenBase 
 from src.frog import Frog
+from src.world.world import World
 
 BASE_DIR = os.path.dirname(__file__)  
 ASSET_DIR = os.path.join(BASE_DIR, "..", "assets", "images", "player")
@@ -23,6 +24,9 @@ class GameScreen(ScreenBase):
         self.is_paused = False
         
         self.key_states = {'left': False, 'right': False}
+        
+        self.world = World()
+        self.world.load_simple_level(self.screen_height)
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -52,28 +56,36 @@ class GameScreen(ScreenBase):
     def update(self, dt):
         if not self.is_paused:
             if self.key_states['left']:
+                self.frog.x_pos -= self.frog.MOVE_SPEED * dt * 60
                 self.frog.move_left()
             elif self.key_states['right']:
+                self.frog.x_pos += self.frog.MOVE_SPEED * dt * 60
                 self.frog.move_right()
             elif not self.frog.is_jumping: # Jika tidak bergerak dan tidak lompat, idle
                 self.frog.idle()
+                
+            self.frog.apply_gravity(dt)
             
-            self.frog.update(dt) #update semuanya
-
+            self.frog.rect.x = int(self.frog.x_pos)
+            self.frog.rect.y = int(self.frog.y_pos)
+            
+            for tile in self.world.get_collisions(self.frog.rect):
+                if self.frog.velocity_y > 0 and \
+                    self.frog.rect.bottom <= tile.rect.bottom:  # jatuh
+                    self.frog.land_on(tile.rect)
+                    
             if not self.frog.is_dead:
                 self.score += dt * 10
+                
+            self.frog.update(dt)
 
     def draw(self, surface):
         surface.fill(self.background_color)
+        self.world.draw(surface)
         self.frog.draw(surface)
 
         score_text = self.font.render(f"Score: {int(self.score)}", True, (255, 255, 255))
         surface.blit(score_text, (10, 10))
-
-        controls_text = self.font.render(
-            "SPACE: Jump | A/D: Move | W: Attack | ESC: Pause", True, (255, 255, 255)
-        )
-        surface.blit(controls_text, (10, 50))
 
         if self.is_paused:
             self.draw_pause_overlay(surface)

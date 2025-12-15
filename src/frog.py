@@ -42,27 +42,38 @@ class Frog:
         self.facing_left = False
         self.is_dead = False
         self.scale = scale
-        # posisi
-        self.rect = pygame.Rect(x, y, 64 * 2.5, 32 * 2.5)
-        self.image = pygame.Surface((80, 80), pygame.SRCALPHA)
         
-        self.x_pos = float(x)
-        self.y_pos = float(y)
-        self.ground_y = float(y)
+        self.collision_offset_y = int(8 * self.scale)
+        self.foot_offset = int(9 * self.scale)
+        
+        # posisi
+        self.image = pygame.Surface((1, 1), pygame.SRCALPHA)
+        self.rect = self.image.get_rect()
+        
+        self.ground_y = y
+        self.rect.midbottom = (x, y)
+        
+        self.x_pos = float(self.rect.x)
+        self.y_pos = float(self.rect.y)
         
         self.is_jumping = False
         self.velocity_y = 0.0
+        self.on_ground = True  
 
         self.update_sprite()
+        
+        self.rect.bottom = self.ground_y
+        self.y_pos = float(self.rect.y)
 
 
     # gerak
     
     def jump(self):
-        if not self.is_dead:
+        if not self.is_dead and self.on_ground:
             self.is_jumping = True
             self.velocity_y = -self.JUMP_FORCE
             self.current_row = self.ROW_WALK
+            self.on_ground = False
 
     def move_right(self):
         if not self.is_dead:
@@ -91,9 +102,9 @@ class Frog:
 
     # animasi
 
-    def animate(self):
+    def animate(self, dt):
         total = self.frames_per_row[self.current_row]
-        self.current_frame += self.animation_speed
+        self.current_frame += self.animation_speed * dt * 60
 
         if self.current_frame >= total:
             if self.current_row == self.ROW_ATTACK:
@@ -138,35 +149,47 @@ class Frog:
         self.x_pos = float(self.rect.x)
         self.y_pos = float(self.rect.y)
         
-        current_x = self.rect.x
-        current_y = self.rect.y
-        temp_rect = self.image.get_rect()
-        self.rect.width = temp_rect.width
-        self.rect.height = temp_rect.height
-        self.rect.x = current_x 
-        self.rect.y = current_y
 
     # update
 
     def update(self, dt):
-        # 1. Update Jump/Gravity
-        if self.is_jumping:
+        # Update Jump/Gravity
+        if not self.on_ground:
             self.velocity_y += self.GRAVITY * dt * 60 
             self.y_pos += self.velocity_y * dt * 60
             
-            # Cek jika sudah mendarat
-            if self.y_pos >= self.ground_y:
-                self.y_pos = self.ground_y
+            self.rect.y = int(self.y_pos)
+            
+            collision_bottom = self.rect.bottom - self.collision_offset_y
+            
+            if collision_bottom >= self.ground_y:
+                self.rect.bottom = self.ground_y + self.collision_offset_y
+                self.y_pos = float(self.rect.y)
+                self.velocity_y = 0
                 self.is_jumping = False
-                self.velocity_y = 0.0
-                self.idle()
+                self.on_ground = True
+                if self.current_row != self.ROW_ATTACK:
+                    self.idle()   
+            else:
+                self.on_ground = False
         
-        # 2. Update posisi Rect
+        # Update posisi horizontal
         self.rect.x = int(self.x_pos)
-        self.rect.y = int(self.y_pos)
         
-        # 3. Update Animasi
-        self.animate()
+        #  Update Animasi
+        self.animate(dt)
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
+        
+    def apply_gravity(self, dt):
+        self.velocity_y += self.GRAVITY * dt * 60
+        self.y_pos += self.velocity_y * dt * 60
+
+    def land_on(self, tile_rect):
+        self.rect.bottom = tile_rect.top + self.collision_offset_y
+        self.y_pos = float(self.rect.y)
+        self.velocity_y = 0
+        self.is_jumping = False
+        self.on_ground = True
+        self.idle()

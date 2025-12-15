@@ -54,9 +54,9 @@ class MainMenuScreen(ScreenBase):
             i.handle_event(event)
 
     def update(self, dt):
-        self.frog.animate()
-        pass
+        self.frog.update(dt)
         self.coin_display.update()
+        pass
 
     def draw(self, surface):
         surface.blit(self.bg, (0, 0))

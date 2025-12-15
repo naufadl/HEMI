@@ -7,6 +7,7 @@ from src.coin import Spinning_Coin, Coin
 class MainMenuScreen(ScreenBase):
     def __init__(self, manager, screen_size, player_coin):
         super().__init__(manager, screen_size)
+        self.screen_size=screen_size
 
         
         image_path = "assets/images/background_main_menu/Summer2.png"
@@ -26,7 +27,7 @@ class MainMenuScreen(ScreenBase):
 
         #titik acuan tengah layar
         cx=screen_size[0]//2
-        cy=screen_size[1]//2-40
+        cy=screen_size[1]//2
 
         self.frog = Frog(450, 500, scale=15.0)
         self.frog.current_row = self.frog.ROW_IDLE

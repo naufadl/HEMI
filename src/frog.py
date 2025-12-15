@@ -10,7 +10,7 @@ class Frog:
     GRAVITY = 0.8
     MOVE_SPEED = 4
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, scale=2.5):
         try:
             self.sprite_sheet = pygame.image.load(
                 'assets/images/player/frog_spritesheet.png'
@@ -41,7 +41,7 @@ class Frog:
 
         self.facing_left = False
         self.is_dead = False
-        
+        self.scale = scale
         # posisi
         self.rect = pygame.Rect(x, y, 64 * 2.5, 32 * 2.5)
         self.image = pygame.Surface((80, 80), pygame.SRCALPHA)
@@ -68,6 +68,7 @@ class Frog:
         if not self.is_dead:
             self.current_row = self.ROW_WALK
             self.facing_left = False
+
 
     def move_left(self):
         if not self.is_dead:
@@ -120,7 +121,7 @@ class Frog:
 
         img = self.sprite_sheet.subsurface(src)
         
-        scale = 2.5
+        scale = self.scale
         img = pygame.transform.scale(
         img,
         (int(frame_w * scale), int(frame_h * scale))

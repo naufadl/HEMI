@@ -28,9 +28,9 @@ class GameScreen(ScreenBase):
         if event.type == pygame.KEYDOWN:
             if event.key in (pygame.K_SPACE, pygame.K_UP):
                 self.frog.jump()
-            elif event.key == pygame.K_a:
+            elif event.key in (pygame.K_a, pygame.K_LEFT):
                 self.key_states['left'] = True
-            elif event.key == pygame.K_d:
+            elif event.key in (pygame.K_d, pygame.K_RIGHT):
                 self.key_states['right'] = True
             elif event.key == pygame.K_w:
                  self.frog.attack()
@@ -41,9 +41,9 @@ class GameScreen(ScreenBase):
                 self.reset_game()
                 
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
+            if event.key in (pygame.K_a, pygame.K_LEFT):
                 self.key_states['left'] = False
-            elif event.key == pygame.K_d:
+            elif event.key in (pygame.K_d, pygame.K_RIGHT):
                 self.key_states['right'] = False
 
         if event.type == pygame.MOUSEBUTTONDOWN and not self.is_paused:

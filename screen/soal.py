@@ -6,7 +6,7 @@ class Soal(ScreenBase):
     def __init__(self,manager, screen_size):
         super().__init__(manager, screen_size)
 
-        image_path = r"C:\Users\tutii\Downloads\FP PBO\HEMI\assets\images\background_soal\origbig.png"
+        image_path = r"assets\images\background_soal\origbig.png"
 
         bg_image=pygame.image.load(image_path).convert()
         self.bg=pygame.transform.scale(bg_image, screen_size)

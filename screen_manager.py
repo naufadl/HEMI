@@ -2,6 +2,11 @@ from screen.main_menu import MainMenuScreen
 from screen.game_screen import GameScreen
 from screen.soal import Soal
 from src.coin import Coin
+from screen.c1 import C1
+from screen.c2 import C2
+from screen.c3 import C3
+from screen.c4 import C4
+from screen.c5 import C5
 
 
 class ScreenManager:
@@ -15,10 +20,12 @@ class ScreenManager:
     def _register_screen(self):
         self.screens["Main_menu"]=MainMenuScreen(self, self.screen_size,self.player_coin) 
         self.screens["game"]=GameScreen(self, self.screen_size)
-        #self.screens["Soal"]=Soal
-
-        self.screens["Main_menu"]=MainMenuScreen(self, self.screen_size,self.player_coin)
-        self.screens["Soal"]=Soal(self,self.screen_size)
+        self.screens["Soal"]=Soal(self,self.screen_size, self.player_coin)
+        self.screens["c1"]=C1(self, self.screen_size, self.player_coin)
+        self.screens["c2"]=C2(self, self.screen_size, self.player_coin)
+        self.screens["c3"]=C3(self, self.screen_size, self.player_coin)
+        self.screens["c4"]=C4(self, self.screen_size, self.player_coin)
+        self.screens["c5"]=C5(self, self.screen_size, self.player_coin)
         
         self.go_to("Main_menu")
 

@@ -26,7 +26,7 @@ class GameScreen(ScreenBase):
         self.key_states = {'left': False, 'right': False}
         
         self.world = World()
-        self.world.load_simple_level(self.screen_height)
+        self.world.load_tilemap_from_file('levels/level1.txt')
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:

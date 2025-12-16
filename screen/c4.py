@@ -22,7 +22,7 @@ class C4(ScreenBase):
         self.is_completed = False
 
         #background
-        image_path = r"C:\Users\tutii\Downloads\FP PBO\HEMI\assets\images\background_soal\soal.jpg"
+        image_path = r"assets\images\background_soal\soal.jpg"
         bg_image=pygame.image.load(image_path).convert()
         self.bg=pygame.transform.scale(bg_image, screen_size)
 

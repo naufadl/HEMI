@@ -54,34 +54,69 @@ class GameScreen(ScreenBase):
             self.frog.jump()
 
     def update(self, dt):
+        is_moving = False
         if not self.is_paused:
-            is_moving = False
+            old_x = self.frog.x_pos
+            old_y = self.frog.y_pos
             if self.key_states['left']:
-                self.frog.x_pos -= self.frog.MOVE_SPEED * dt * 60
+                self.frog.x_pos -= self.frog.MOVE_SPEED * dt 
                 self.frog.move_left()
                 is_moving = True
             elif self.key_states['right']:
-                self.frog.x_pos += self.frog.MOVE_SPEED * dt * 60
+                self.frog.x_pos += self.frog.MOVE_SPEED * dt 
                 self.frog.move_right()
                 is_moving = True
                 
             if not is_moving and self.frog.on_ground and self.frog.current_row != self.frog.ROW_ATTACK:
-                self.frog.idle()
+                self.frog.current_row = self.frog.ROW_IDLE
                 
             self.frog.apply_gravity(dt)
             
             self.frog.rect.x = int(self.frog.x_pos)
             self.frog.rect.y = int(self.frog.y_pos)
             
-            for tile in self.world.get_collisions(self.frog.rect):
-                if self.frog.velocity_y > 0 and \
-                    self.frog.rect.bottom <= tile.rect.bottom: 
-                    self.frog.land_on(tile.rect)
+            self.handle_collisions(old_x, old_y)
+            
+            if self.frog.rect.top > self.screen_height:
+                self.frog.die()
                     
             if not self.frog.is_dead:
                 self.score += dt * 10
                 
             self.frog.update(dt)
+            
+            print("row:", self.frog.current_row, "moving:", is_moving)
+
+            
+    def handle_collisions(self, old_x, old_y):
+        tiles = self.world.get_collisions(self.frog.rect)
+
+        # === HORIZONTAL COLLISION ===
+        self.frog.rect.x = int(self.frog.x_pos)
+        for tile in tiles:
+            if self.frog.rect.colliderect(tile.rect):
+                self.frog.x_pos = old_x
+                self.frog.rect.x = int(old_x)
+                break
+
+        # === VERTICAL COLLISION ===
+        self.frog.rect.y = int(self.frog.y_pos)
+
+        for tile in tiles:
+            if self.frog.rect.colliderect(tile.rect):
+                # JATUH KE ATAS TILE
+                if self.frog.velocity_y > 0 and old_y + self.frog.rect.height <= tile.rect.top:
+                    self.frog.rect.bottom = tile.rect.top
+                    self.frog.y_pos = float(self.frog.rect.y)
+                    self.frog.velocity_y = 0
+                    self.frog.on_ground = True
+
+                # BENTUR KEPALA
+                elif self.frog.velocity_y < 0 and old_y >= tile.rect.bottom:
+                    self.frog.rect.top = tile.rect.bottom
+                    self.frog.y_pos = float(self.frog.rect.y)
+                    self.frog.velocity_y = 0
+
 
     def draw(self, surface):
         surface.fill(self.background_color)
@@ -93,6 +128,11 @@ class GameScreen(ScreenBase):
 
         if self.is_paused:
             self.draw_pause_overlay(surface)
+            
+        pygame.draw.rect(surface, (255,0,0), self.frog.rect, 2)
+        for tile in self.world.tiles:
+            pygame.draw.rect(surface, (0,255,0), tile.rect, 1)
+
 
     def draw_pause_overlay(self, surface):
         overlay = pygame.Surface((self.screen_width, self.screen_height))

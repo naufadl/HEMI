@@ -6,9 +6,9 @@ class Frog:
     ROW_DEAD = 2
     ROW_ATTACK = 3
     
-    JUMP_FORCE = 15 
-    GRAVITY = 0.8
-    MOVE_SPEED = 4
+    JUMP_FORCE = 700 
+    GRAVITY = 2000
+    MOVE_SPEED = 300
 
     def __init__(self, x, y, scale=2.5):
         try:
@@ -46,17 +46,24 @@ class Frog:
         self.collision_offset_y = int(8 * self.scale)
         self.foot_offset = int(9 * self.scale)
         
-        # posisi
-        self.image = pygame.Surface((1, 1), pygame.SRCALPHA)
-        self.rect = self.image.get_rect()
-        
-        self.ground_y = y
+        # hitbox (lebih kecil dari sprite)
+        hitbox_w = int(26 * scale)
+        hitbox_h = int(26 * scale)
+
+        self.rect = pygame.Rect(0, 0, hitbox_w, hitbox_h)
         self.rect.midbottom = (x, y)
+
+        self.x_pos = float(self.rect.x)
+        self.y_pos = float(self.rect.y)
+
+
+        self.ground_y = y
         
         self.x_pos = float(self.rect.x)
         self.y_pos = float(self.rect.y)
         
         self.is_jumping = False
+        self.is_moving = False
         self.velocity_y = 0.0
         self.on_ground = True  
 
@@ -79,16 +86,15 @@ class Frog:
         if not self.is_dead:
             self.current_row = self.ROW_WALK
             self.facing_left = False
+            self.is_moving = True
 
 
     def move_left(self):
         if not self.is_dead:
             self.current_row = self.ROW_WALK
             self.facing_left = True
+            self.is_moving = True
 
-    def idle(self):
-        if not self.is_dead and not self.is_jumping and self.current_row != self.ROW_ATTACK:
-            self.current_row = self.ROW_IDLE
 
     def attack(self):
         if not self.is_dead:
@@ -104,7 +110,7 @@ class Frog:
 
     def animate(self, dt):
         total = self.frames_per_row[self.current_row]
-        self.current_frame += self.animation_speed * dt * 60
+        self.current_frame += self.animation_speed * dt * 50
 
         if self.current_frame >= total:
             if self.current_row == self.ROW_ATTACK:
@@ -143,8 +149,7 @@ class Frog:
 
         self.image = img
         
-        old_midbottom = self.rect.midbottom
-        self.rect = self.image.get_rect(midbottom=old_midbottom)
+
         
         self.x_pos = float(self.rect.x)
         self.y_pos = float(self.rect.y)
@@ -156,14 +161,16 @@ class Frog:
         self.animate(dt)
 
     def draw(self, surface):
-        surface.blit(self.image, self.rect)
+        draw_x = self.rect.centerx - self.image.get_width() // 2
+        draw_y = self.rect.bottom - self.image.get_height() + self.foot_offset
+        surface.blit(self.image, (draw_x, draw_y))
         
     def apply_gravity(self, dt):
-        self.velocity_y += self.GRAVITY * dt * 60
-        self.y_pos += self.velocity_y * dt * 60
+        self.velocity_y += self.GRAVITY * dt 
+        self.y_pos += self.velocity_y * dt 
 
     def land_on(self, tile_rect):
-        self.rect.bottom = tile_rect.top + self.collision_offset_y
+        self.rect.bottom = tile_rect.top
         self.y_pos = float(self.rect.y)
         self.velocity_y = 0
         self.is_jumping = False

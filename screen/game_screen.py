@@ -55,13 +55,17 @@ class GameScreen(ScreenBase):
 
     def update(self, dt):
         if not self.is_paused:
+            is_moving = False
             if self.key_states['left']:
                 self.frog.x_pos -= self.frog.MOVE_SPEED * dt * 60
                 self.frog.move_left()
+                is_moving = True
             elif self.key_states['right']:
                 self.frog.x_pos += self.frog.MOVE_SPEED * dt * 60
                 self.frog.move_right()
-            elif not self.frog.is_jumping: # Jika tidak bergerak dan tidak lompat, idle
+                is_moving = True
+                
+            if not is_moving and self.frog.on_ground and self.frog.current_row != self.frog.ROW_ATTACK:
                 self.frog.idle()
                 
             self.frog.apply_gravity(dt)
@@ -71,7 +75,7 @@ class GameScreen(ScreenBase):
             
             for tile in self.world.get_collisions(self.frog.rect):
                 if self.frog.velocity_y > 0 and \
-                    self.frog.rect.bottom <= tile.rect.bottom:  # jatuh
+                    self.frog.rect.bottom <= tile.rect.bottom: 
                     self.frog.land_on(tile.rect)
                     
             if not self.frog.is_dead:

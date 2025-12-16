@@ -153,30 +153,6 @@ class Frog:
     # update
 
     def update(self, dt):
-        # Update Jump/Gravity
-        if not self.on_ground:
-            self.velocity_y += self.GRAVITY * dt * 60 
-            self.y_pos += self.velocity_y * dt * 60
-            
-            self.rect.y = int(self.y_pos)
-            
-            collision_bottom = self.rect.bottom - self.collision_offset_y
-            
-            if collision_bottom >= self.ground_y:
-                self.rect.bottom = self.ground_y + self.collision_offset_y
-                self.y_pos = float(self.rect.y)
-                self.velocity_y = 0
-                self.is_jumping = False
-                self.on_ground = True
-                if self.current_row != self.ROW_ATTACK:
-                    self.idle()   
-            else:
-                self.on_ground = False
-        
-        # Update posisi horizontal
-        self.rect.x = int(self.x_pos)
-        
-        #  Update Animasi
         self.animate(dt)
 
     def draw(self, surface):
@@ -192,4 +168,3 @@ class Frog:
         self.velocity_y = 0
         self.is_jumping = False
         self.on_ground = True
-        self.idle()

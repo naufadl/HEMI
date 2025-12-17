@@ -29,7 +29,7 @@ class Tilemap:
                 y = row_idx * scaled_size
                 
                 # Buat tile object
-                tile = Tile(tile_image, x, y)
+                tile = Tile(tile_image, x, y, tile_coords=(tile_col, tile_row))
                 self.tiles.append(tile)
     
     def load_from_file(self, filepath):

@@ -109,6 +109,10 @@ class Frog:
         self.is_dead = True
         self.current_row = self.ROW_DEAD
         self.current_frame = 0.0
+        
+    def take_damage(self):
+        if not self.is_dead:
+            self.die()
 
     # animasi
 

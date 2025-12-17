@@ -46,12 +46,16 @@ class Frog:
         self.collision_offset_y = int(8 * self.scale)
         self.foot_offset = int(9 * self.scale)
         
-        # hitbox (lebih kecil dari sprite)
-        hitbox_w = int(26 * scale)
-        hitbox_h = int(26 * scale)
-
+        hitbox_w = int(17 * scale)
+        hitbox_h = int(14 * scale)
+        
         self.rect = pygame.Rect(0, 0, hitbox_w, hitbox_h)
+        
+        self.hitbox_offset_x = int(-15 * self.scale)
+        self.sprite_offset_x = int(9 * self.scale) 
+
         self.rect.midbottom = (x, y)
+        self.rect.x += self.hitbox_offset_x
 
         self.x_pos = float(self.rect.x)
         self.y_pos = float(self.rect.y)
@@ -149,8 +153,6 @@ class Frog:
 
         self.image = img
         
-
-        
         self.x_pos = float(self.rect.x)
         self.y_pos = float(self.rect.y)
         
@@ -161,16 +163,21 @@ class Frog:
         self.animate(dt)
 
     def draw(self, surface):
-        draw_x = self.rect.centerx - self.image.get_width() // 2
+        if self.facing_left:
+            draw_x = self.rect.x - int(39 * self.scale)
+        else:
+            draw_x = self.rect.x - self.sprite_offset_x 
+        
         draw_y = self.rect.bottom - self.image.get_height() + self.foot_offset
         surface.blit(self.image, (draw_x, draw_y))
+
         
     def apply_gravity(self, dt):
         self.velocity_y += self.GRAVITY * dt 
         self.y_pos += self.velocity_y * dt 
 
     def land_on(self, tile_rect):
-        self.rect.bottom = tile_rect.top
+        self.rect.bottom = tile_rect.top - self.foot_offset
         self.y_pos = float(self.rect.y)
         self.velocity_y = 0
         self.is_jumping = False

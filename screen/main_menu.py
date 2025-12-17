@@ -10,7 +10,7 @@ class MainMenuScreen(ScreenBase):
         self.screen_size=screen_size
 
         
-        image_path = "assets/images/background_main_menu/Summer2.png"
+        image_path = "assets/images/background_main_menu/HEMI.png"
 
         #background
         bg_image=pygame.image.load(image_path).convert()
@@ -29,7 +29,7 @@ class MainMenuScreen(ScreenBase):
         cx=screen_size[0]//2
         cy=screen_size[1]//2
 
-        self.frog = Frog(450, 500, scale=15.0)
+        self.frog = Frog(500, 500, scale=15.0)
         self.frog.current_row = self.frog.ROW_IDLE
         self.frog.current_frame = 0.0
         
@@ -60,8 +60,6 @@ class MainMenuScreen(ScreenBase):
 
     def draw(self, surface):
         surface.blit(self.bg, (0, 0))
-        title=self.font_title.render("HEMI", True, (255,255,255))
-        surface.blit(title, (self.screen_width//2-45, 120))
         self.frog.draw(surface)
 
         self.coin_display.draw(surface, self.font_button)

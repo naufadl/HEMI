@@ -3,24 +3,26 @@ import pygame
 
 class Coin:
     def __init__(self, coin:int):
+        if coin < 0:
+            coin=0
         self.__coin=coin
 
 
     @property 
     def coin(self):
         return self.__coin
-    
-    @coin.setter
-    def coin(self, c):
-        if isinstance(c,int) and c>=0:
-            self.__coin=c
-        else:
-            raise TypeError("Nilai harus int dan >= 0")
         
 
     def add_coin(self,c):
         if isinstance(c, int) and c>0:
             self.__coin+=c
+
+
+    def use_coin(self,req_c:int)->bool:
+        if self.__coin >= req_c:
+            self.__coin -= req_c
+            return True
+        return False
         
 
     def check_coin(self,req_c:int)->bool:

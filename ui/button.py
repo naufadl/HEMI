@@ -1,8 +1,8 @@
 import pygame
 
 class Button:
-    def __init__(self, text, center_pos, size, callback, font, bg_color=(70,70,70),
-                 hover_color=(255,255,255), text_color=(255,255,255)):
+    def __init__(self, text, center_pos, size, callback, font, bg_color=(169,208,68),#169,208,68
+                 hover_color=(255,255,255), text_color=(0,0,0)):
         
         self.text=text
         self.callback=callback
@@ -28,6 +28,6 @@ class Button:
 
     def draw(self, surface):
         color= self.hover_color if self._is_hovered else self.bg_color
-        pygame.draw.rect(surface, color, self.rect,border_radius=8)
-        pygame.draw.rect(surface, (100,100,100), self.rect,2,border_radius=8)
+        pygame.draw.rect(surface, color, self.rect,border_radius=20)
+        pygame.draw.rect(surface, (0,0,0), self.rect,2,border_radius=20)
         surface.blit(self.text_surface,self.text_rect)

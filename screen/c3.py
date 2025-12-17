@@ -31,15 +31,18 @@ class C3(ScreenBase):
         self.font_button=pygame.font.SysFont(None,28)
 
         self.back_button = Button("Back to Menu",
-                                  (self.cx, self.cy + 100),
+                                  (self.cx, self.cy + 200),
                                   (200, 50),
                                   lambda: self.manager.go_to("Soal"),
-                                  self.font_button)
+                                  self.font_button, 
+                                  bg_color=(70,70,70),
+                                  text_color=(255, 255, 255))
 
         #soal
         self.questions = [
-            {"question": "4 x 5 = ?", "options": ["3","4","20"], "answer":"20"},
-            {"question": "100 x 3 = ?", "options": ["300","10","20"], "answer":"300"}
+            {"question": "8 x 7 = ?", "options": ["72","48","56"], "answer":"56"},
+            {"question": "82 x 3 = ?", "options": ["246","232","216"], "answer":"246"},
+            {"question": "102 : 3= ?", "options": ["24","34","28"], "answer":"34"}
         ]
 
         #tombol jawaban
@@ -84,6 +87,7 @@ class C3(ScreenBase):
     def draw(self, surface):
         surface.blit(self.bg, (0, 0))
         self.coin_display.draw(surface, self.font_button)
+       
         
         cx=self.screen_size[0]//2
         cy=self.screen_size[1]//2 
@@ -102,6 +106,7 @@ class C3(ScreenBase):
             txt = self.font_question.render(q["question"], True, (0,0,0))
             surface.blit(txt, (cx - txt.get_width()//2, 150))
             
+
             # GAMBAR TOMBOL
             for btn in self.buttons:
                 btn.draw(surface)   

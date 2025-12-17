@@ -8,6 +8,8 @@ class MainMenuScreen(ScreenBase):
     def __init__(self, manager, screen_size, player_coin):
         super().__init__(manager, screen_size)
         self.screen_size=screen_size
+        self.player_coin=player_coin
+        self.error_text = None
 
         
         image_path = "assets/images/background_main_menu/HEMI.png"
@@ -18,7 +20,9 @@ class MainMenuScreen(ScreenBase):
 
         #title+button
         self.font_title=pygame.font.SysFont(None,48)
-        self.font_button=pygame.font.SysFont(None,28)
+        #self.font_button=pygame.font.SysFont(None, 35)
+
+        self.font_button=pygame.font.Font("assets/font/PixelOperator8-Bold.ttf", 21)
 
         #gambar coin
         coin_pos_x = 20
@@ -34,13 +38,17 @@ class MainMenuScreen(ScreenBase):
         self.frog.current_frame = 0.0
         
         self.buttons=[
-            Button("Game", (cx+250,cy), (180,40), self.game, self.font_button),
-            Button('Soal', (cx+250,cy+100), (180,40), self.soal, self.font_button),
-            Button('Exit',(cx+250,cy+200), (180,40), self.exit, self.font_button)
+            Button("Game", (cx+150,cy), (180,80), self.game, self.font_button),
+            Button('Soal', (cx+150,cy+100), (180,80), self.soal, self.font_button),
+            Button('Exit',(cx+150,cy+200), (180,80), self.exit, self.font_button)
         ]
 
     def game(self):
-        self.manager.go_to('game')
+        if self.player_coin.use_coin(10):
+            self.manager.go_to('game')
+        else:
+            self.error_text="coin tidak cukup"
+            self.error_timer=pygame.time.get_ticks()
 
     def soal(self):
         self.manager.go_to('Soal')
@@ -63,6 +71,11 @@ class MainMenuScreen(ScreenBase):
         self.frog.draw(surface)
 
         self.coin_display.draw(surface, self.font_button)
+
+        if self.error_text:
+            text = self.font_button.render(self.error_text, True, (255, 0, 0))
+            rect = text.get_rect(center=(self.screen_size[0]//2-230, self.screen_size[1]//2))
+            surface.blit(text, rect)
 
         for i in self.buttons:
             i.draw(surface)

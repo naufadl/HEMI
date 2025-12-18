@@ -43,7 +43,6 @@ class Frog:
         self.is_dead = False
         self.scale = scale
         
-        self.collision_offset_y = int(8 * self.scale)
         self.foot_offset = int(9 * self.scale)
         
         hitbox_w = int(17 * scale)
@@ -56,10 +55,6 @@ class Frog:
 
         self.rect.midbottom = (x, y)
         self.rect.x += self.hitbox_offset_x
-
-        self.x_pos = float(self.rect.x)
-        self.y_pos = float(self.rect.y)
-
 
         self.ground_y = y
         

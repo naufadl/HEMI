@@ -186,15 +186,6 @@ class GameScreen(ScreenBase):
         if self.is_level_complete:
             self.draw_level_complete_overlay(surface)
             
-        pygame.draw.rect(surface, (255,0,0), self.frog.rect, 2)
-        for tile in self.world.tiles:
-            if hasattr(tile, 'is_deadly') and tile.is_deadly:
-                color = (255, 0, 255)  # Magenta untuk death
-            elif hasattr(tile, 'is_goal') and tile.is_goal:
-                color = (255, 255, 0)  # Kuning untuk goal
-            else:
-                color = (0, 255, 0)  # Hijau untuk normal
-            pygame.draw.rect(surface, color, tile.rect, 1)
             
     def draw_level_complete_overlay(self, surface):
         # Semi-transparent overlay

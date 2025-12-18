@@ -41,7 +41,7 @@ class Tilemap:
                 tiles_in_line = line.strip().split()
                 
                 for tile_str in tiles_in_line:
-                    if tile_str == '-':
+                    if tile_str == '-': # '-' = space kosong, append None
                         row.append(None)
                     else:
                         col, row_num = map(int, tile_str.split(','))

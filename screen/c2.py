@@ -31,15 +31,18 @@ class C2(ScreenBase):
         self.font_button=pygame.font.SysFont(None,28)
 
         self.back_button = Button("Back to Menu",
-                                  (self.cx, self.cy + 100),
+                                  (self.cx, self.cy + 200),
                                   (200, 50),
                                   lambda: self.manager.go_to("Soal"),
-                                  self.font_button)
+                                  self.font_button, 
+                                  bg_color=(70,70,70),
+                                  text_color=(255, 255, 255))
 
         #soal
         self.questions = [
             {"question": "4 x 5 = ?", "options": ["3","4","20"], "answer":"20"},
-            {"question": "100 x 3 = ?", "options": ["300","10","20"], "answer":"300"}
+            {"question": "100 x 3 = ?", "options": ["300","10","20"], "answer":"300"},
+            {"question": "72 : 12 = ?", "options": ["7","8","6"], "answer":"6"},
         ]
 
         #tombol jawaban
@@ -83,6 +86,7 @@ class C2(ScreenBase):
     def draw(self, surface):
         surface.blit(self.bg, (0, 0))
         self.coin_display.draw(surface, self.font_button)
+       
         
         cx=self.screen_size[0]//2
         cy=self.screen_size[1]//2 

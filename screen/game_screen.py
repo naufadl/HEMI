@@ -9,8 +9,10 @@ ASSET_DIR = os.path.join(BASE_DIR, "..", "assets", "images", "player")
 ASSET_DIR = os.path.abspath(ASSET_DIR)
 
 class GameScreen(ScreenBase):
-    def __init__(self, manager, screen_size):
+    def __init__(self, manager, screen_size,player_coin):
         super().__init__(manager, screen_size)
+
+        self.player_coin=player_coin
 
         self.screen_width, self.screen_height = screen_size
         self.background_color = (171, 214, 236)
@@ -34,6 +36,8 @@ class GameScreen(ScreenBase):
         self.menu_font = pygame.font.SysFont(None, 48)
         self.selected_option = 0
 
+        self.error_text = None
+
     def handle_event(self, event):
         if self.is_level_complete:
             if event.type == pygame.KEYDOWN:
@@ -50,10 +54,15 @@ class GameScreen(ScreenBase):
                 elif event.key in (pygame.K_DOWN, pygame.K_s):
                     self.selected_option = 1
                 elif event.key in (pygame.K_RETURN, pygame.K_SPACE):
-                    if self.selected_option == 0:  # Try Again
-                        self.reset_game()
-                        self.is_game_over = False
-                    else:  # Main Menu
+                    if self.selected_option == 0:  
+                        if self.player_coin.use_coin(10):
+                            self.reset_game()
+                            self.is_game_over = False
+                        else:
+                            self.error_text = "Coin tidak cukup"
+                       
+                    else:
+                        # Main Menu
                         self.manager.go_to("Main_menu")
                         self.reset_game()
                         self.is_game_over = False
@@ -239,6 +248,12 @@ class GameScreen(ScreenBase):
                 arrow = self.menu_font.render(">", True, (255, 255, 100))
                 surface.blit(arrow, (option_rect.left - 40, option_rect.top))
 
+        if self.error_text:
+            error_surface = self.font.render(self.error_text, True, (255, 80, 80))
+            error_rect = error_surface.get_rect(
+                center=(self.screen_width // 2, self.screen_height // 2 + 250)
+            )
+            surface.blit(error_surface, error_rect)
 
     def draw_pause_overlay(self, surface):
         overlay = pygame.Surface((self.screen_width, self.screen_height))

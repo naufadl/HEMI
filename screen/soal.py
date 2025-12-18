@@ -14,8 +14,11 @@ class Soal(ScreenBase):
         bg_image=pygame.image.load(image_path).convert()
         self.bg=pygame.transform.scale(bg_image, screen_size)
 
-        self.font_title=pygame.font.SysFont(None,48)
-        self.font_button=pygame.font.SysFont(None,28)
+        #self.font_title=pygame.font.SysFont('georgia',30)
+        #self.font_button=pygame.font.SysFont(None,25)
+        self.font_title=pygame.font.Font("assets/font/PixelOperator8-Bold.ttf", 16)
+        self.font_button=pygame.font.Font("assets/font/PixelOperator8-Bold.ttf", 12)
+        
 
         self.coin_display = Spinning_Coin(10, 10, self.coins)
 
@@ -28,7 +31,7 @@ class Soal(ScreenBase):
             Button('Chapter 3',(cx,cy+100), (180,40), self.c3, self.font_button),
             Button('Chapter 4',(cx-250,cy+100), (180,40),  self.c4, self.font_button),
             Button('Chapter 5',(cx,cy+200), (180,40), self.c5,  self.font_button),
-            Button('Previous', (cx-390, cy+270), (100,40), self.prev_from_soal, self.font_button)
+            Button('Previous', (cx-390, cy+270), (120,40), self.prev_from_soal, self.font_button)
         ]
 
 
@@ -55,12 +58,13 @@ class Soal(ScreenBase):
             i.handle_event(event)
 
     def update(self, dt):
+        self.coin_display.update()
         pass
 
     def draw(self, surface):
         surface.blit(self.bg, (0, 0))
-        title=self.font_title.render("Oh noooo, i really like this course", True, (0,0,180))
-        surface.blit(title, (self.screen_width//2-(title.get_width()//2), 80))
+        title1=self.font_title.render("Fightiiingg-!!", True, (255,255,255))
+        surface.blit(title1, (self.screen_width//2-450, 80))
 
         self.coin_display.draw(surface, self.font_button)
 

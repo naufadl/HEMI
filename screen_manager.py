@@ -19,7 +19,7 @@ class ScreenManager:
 
     def _register_screen(self):
         self.screens["Main_menu"]=MainMenuScreen(self, self.screen_size,self.player_coin) 
-        self.screens["game"]=GameScreen(self, self.screen_size)
+        self.screens["game"]=GameScreen(self, self.screen_size, self.player_coin)
         self.screens["Soal"]=Soal(self,self.screen_size, self.player_coin)
         self.screens["c1"]=C1(self, self.screen_size, self.player_coin)
         self.screens["c2"]=C2(self, self.screen_size, self.player_coin)
